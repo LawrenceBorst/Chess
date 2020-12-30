@@ -3,19 +3,21 @@
 
 #include "Node.h"
 #include <queue>
+#include <algorithm>
 
 class Tree {
   public:
   Tree(Board, int);
   ~Tree();
-  void destroy_tree(Node*);
   Node *root;
   int player;
-  int minimax(Node*);
-  void add_leaves();
+  int minimax(Node*, int, bool);
   int height;
   Board get_best_move();
-  void print_level_order();
+
+  private:
+  void add_leaves();
+  void destroy_tree(Node*);
 };
 
 #endif
