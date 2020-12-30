@@ -6,14 +6,15 @@
 
 class Tree {
   public:
-  Tree(Board);
+  Tree(Board, int);
   ~Tree();
   void destroy_tree(Node*);
   Node *root;
+  int player;
   int minimax(Node*);
   void add_leaves();
   int height;
-  Node* get_best_move();
+  Board get_best_move();
   void print_level_order();
 };
 

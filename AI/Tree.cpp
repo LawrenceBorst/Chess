@@ -1,9 +1,10 @@
 #include "Tree.h"
 
-Tree::Tree(Board b) {
+Tree::Tree(Board b, int p) {
   this->root = new Node(b);
   this->root->depth = 0;
   this->height = 0;
+  this->player = p; // 1 for white, 0 for black
 }
 
 Tree::~Tree() {
@@ -40,6 +41,8 @@ int Tree::minimax(Node* root) {
   }
   return *min_element(scores.begin(), scores.end());
 }
+
+
 
 void Tree::print_level_order() {
   queue<Node*> q;
@@ -80,7 +83,11 @@ void Tree::add_leaves() {
   }
 }
 
-Node* Tree::get_best_move() {
+Board Tree::get_best_move() {
+  int depth = 3;
+  for (int i = 0; i < depth; i++) {
+    this->add_leaves();
+  }
   // Look at the children of root
   // For each child, calculate the worst outcome
   // Pick the one with the highest worst outcome
@@ -93,5 +100,5 @@ Node* Tree::get_best_move() {
       minimax_outcome = score;
     }
   }
-  return best_move;
+  return best_move->board;
 }

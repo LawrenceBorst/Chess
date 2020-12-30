@@ -1,155 +1,54 @@
 #include <iostream>
 #include "Board.h"
 #include "AI/Tree.h"
+#include <regex>
+#include <stdexcept>
+
+array<int, 2> convert_algebraic(string);
 
 int main() {
   Board board;
 
-  Tree computer(board);
-  computer.add_leaves();
-  computer.add_leaves();
-  computer.add_leaves();
-  //computer.print_level_order();
-  wcout << computer.get_best_move()->board.print_board() << endl;
+  wcout << "You're playing black!" << endl;
+  string start, end;
+  array<int, 2> s, e;
 
-  computer.~Tree();
-  //computer.add_leaves();
+  // Game loop
+  while (true) {
+    wcout << "You moved. Current position:\n" << board.print_board() << endl;
+    
+    Tree computer(board, 0);
+    board = computer.get_best_move();
 
-  /*board.move({1, 3}, {3, 3});
-  wcout << board.print_board() << endl;
-  
-  board.move({6, 4}, {5, 4});
-  wcout << board.print_board() << endl;
+    wcout << "Computer moved. Current position:\n" << board.print_board() << endl;
+    do {
+      wcout << "Make a move from [...] to [...]" << endl;
+      do {
+        wcout << "From (e.g. b2):" << endl;
+        cin >> start;
+      } while (not regex_match(start, regex("([a-h])([1-8])")));
+      s = convert_algebraic(start);
+      
+      do {
+        wcout << "To (e.g. c3):" << endl;
+        cin >> end;
+      } while (not regex_match(end, regex("([a-h])([1-8])")));
+      e = convert_algebraic(end);
+      
+    } while (not board.is_move_allowed({s[0], s[1]}, {e[0], e[1]}));
 
-  board.move({1, 2}, {3, 2});
-  wcout << board.print_board() << endl;
+    board.move(s, e);
+  }
 
-  board.move({6, 5}, {4, 5});
-  wcout << board.print_board() << endl;
 
-  board.move({0, 1}, {2, 2});
-  wcout << board.print_board() << endl;
 
-  board.move({7, 6}, {5, 5});
-  wcout << board.print_board() << endl;
-
-  board.move({0, 6}, {2, 5});
-  wcout << board.print_board() << endl;
-
-  board.move({6, 1}, {5, 1});
-  wcout << board.print_board() << endl;
-  
-  board.move({1, 4}, {2, 4});
-  wcout << board.print_board() << endl;
-
-  board.move({7, 2}, {6, 1});
-  wcout << board.print_board() << endl;
-
-  board.move({0, 5}, {2, 3});
-  wcout << board.print_board() << endl;
-
-  board.move({7, 5}, {3, 1});
-  wcout << board.print_board() << endl;
-
-  board.move({0, 2}, {1, 3});
-  wcout << board.print_board() << endl;
-
-  board.move({3, 1}, {2, 2});
-  wcout << board.print_board() << endl;
-
-  board.move({1, 3}, {2, 2});
-  wcout << board.print_board() << endl;
-
-  board.move({6, 3}, {4, 3});
-  wcout << board.print_board() << endl;
-
-  board.move({0, 4}, {0, 6});
-  wcout << board.print_board() << endl;
-
-  board.move({7, 4}, {7, 6});
-  wcout << board.print_board() << endl;
-
-  board.move({0, 0}, {0, 2});
-  wcout << board.print_board() << endl;
-
-  board.move({7, 1}, {6, 3});
-  wcout << board.print_board() << endl;
-
-  board.move({1, 1}, {2, 1});
-  wcout << board.print_board() << endl;
-
-  board.move({5, 5}, {3, 4});
-  wcout << board.print_board() << endl;
-
-  board.move({2, 2}, {1, 1});
-  wcout << board.print_board() << endl;
-
-  board.move({7, 5}, {5, 5});
-  wcout << board.print_board() << endl;
-
-  board.move({3, 2}, {4, 3});
-  wcout << board.print_board() << endl;
-
-  board.move({6, 1}, {4, 3});
-  wcout << board.print_board() << endl;
-
-  board.move({2, 3}, {3, 2});
-  wcout << board.print_board() << endl;
-
-  board.move({6, 2}, {5, 2});
-  wcout << board.print_board() << endl;
-
-  board.move({3, 2}, {4, 3});
-  wcout << board.print_board() << endl;
-
-  board.move({5, 2}, {4, 3});
-  wcout << board.print_board() << endl;
-
-  board.move({2, 5}, {1, 3});
-  wcout << board.print_board() << endl;
-
-  board.move({5, 5}, {5, 7});
-  wcout << board.print_board() << endl;
-
-  board.move({1, 3}, {3, 4});
-  wcout << board.print_board() << endl;
-
-  board.move({7, 3}, {3, 7});
-  wcout << board.print_board() << endl;
-
-  board.move({1, 7}, {2, 7});
-  wcout << board.print_board() << endl;
-
-  board.move({4, 5}, {3, 4});
-  wcout << board.print_board() << endl;
-
-  board.move({0, 3}, {3, 6});
-  wcout << board.print_board() << endl;
-
-  board.move({3, 7}, {6, 4});
-  wcout << board.print_board() << endl;
-
-  board.move({0, 2}, {2, 2});
-  wcout << board.print_board() << endl;
-
-  board.move({5, 7}, {5, 6});
-  wcout << board.print_board() << endl;
-
-  board.move({3, 6}, {1, 4});
-  wcout << board.print_board() << endl;
-
-  board.move({6, 4}, {3, 7});
-  wcout << board.print_board() << endl;
-
-  board.move({0, 5}, {0, 2});
-  wcout << board.print_board() << endl;
-
-  board.move({3, 7}, {2, 7});
-  wcout << board.print_board() << endl;
-
-  board.move({2, 2}, {7, 2});
-  wcout << board.print_board() << endl;*/
 
   return 0;
+}
 
+array<int, 2> convert_algebraic(string s) {
+  int a = s[1] - '0';
+  int b = (int)s[0];
+  b -= 96;
+  return {a - 1, b - 1};
 }
