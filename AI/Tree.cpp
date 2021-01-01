@@ -5,6 +5,7 @@ Tree::Tree(Board b, int p) {
   this->root->depth = 0;
   this->height = 0;
   this->player = p; // 1 for white, 0 for black
+  this->search_depth = 5;
 }
 
 Tree::~Tree() {
@@ -21,7 +22,9 @@ void Tree::destroy_tree(Node *node) {
   }
 }
 
-/* Uses level-order traversal to add leaves*/
+/* Uses level-order traversal to add leaves
+This will add another layer to the tree
+*/
 void Tree::add_leaves() {
   queue<Node*> q;
   q.push(this->root);
@@ -43,34 +46,45 @@ void Tree::add_leaves() {
   }
 }
 
-int Tree::minimax(Node *node, int depth, bool maximizing_player) {
+/* Gives a minimax score a given move*/
+int Tree::minimax(Node *node, int depth, int alpha, int beta, bool maximizing_player) {
   if (depth == 0) {
     return node->board.count_material();
+  } else {
+    node->add_children();
   }
   if (maximizing_player) {
-    int val = -10000;
+    int max_val = -10000;
     for (Node *child : node->children) {
-      val = max(val, this->minimax(child, depth - 1, false));
+      int val = this->minimax(child, depth - 1, alpha, beta, false);
+      max_val = max(max_val, val);
+      alpha = max(alpha, val);
+      if (beta <= alpha) {
+        break;
+      }
+      return max_val;
     }
-    return val;
   } else {
-    int val = +10000;
+    int min_val = +10000;
     for (Node *child : node->children) {
-      val = min(val, this->minimax(child, depth - 1, false));
+      int val = this->minimax(child, depth - 1, alpha, beta, false);
+      min_val = min(min_val, val);
+      beta = min(beta, val);
+      if (alpha <= beta) {
+        break;
+      }
     }
-    return val;
+    return min_val;
   }
 }
 
+/* Returns the best next move*/
 Board Tree::get_best_move() {
-  int depth = 3;
-  for (int i = 0; i < depth; i++) {
-    this->add_leaves();
-  }
+  this->add_leaves();
   Node *best_move = NULL;
   int score = -10000;
   for (Node *child : this->root->children) {
-    int minimax = this->minimax(child, depth - 1, true);
+    int minimax = this->minimax(child, this->search_depth - 1, -1000, + 1000, true);
     if (minimax > score) {
       best_move = child;
       score = minimax;

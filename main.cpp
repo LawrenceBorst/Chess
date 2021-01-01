@@ -38,6 +38,7 @@ int main() {
     } while (not board.is_move_allowed({s[0], s[1]}, {e[0], e[1]}));
 
     board.move(s, e);
+    computer.~Tree();
   }
 
 

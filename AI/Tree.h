@@ -11,7 +11,8 @@ class Tree {
   ~Tree();
   Node *root;
   int player;
-  int minimax(Node*, int, bool);
+  int minimax(Node*, int, int, int, bool);
+  int search_depth;
   int height;
   Board get_best_move();
 
