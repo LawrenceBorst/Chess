@@ -4,6 +4,7 @@
 #include "Node.h"
 #include <queue>
 #include <algorithm>
+#include <math.h>
 
 class Tree {
   public:
@@ -11,13 +12,14 @@ class Tree {
   ~Tree();
   Node *root;
   int player;
+  void print_level_order();
   int minimax(Node*, int, int, int, bool);
   int search_depth;
   int height;
   Board get_best_move();
+  void add_leaves();
 
   private:
-  void add_leaves();
   void destroy_tree(Node*);
 };
 
